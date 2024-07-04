@@ -1,2 +1,2 @@
 # project_G
-Game on Python!
+Dating SIM using Python
