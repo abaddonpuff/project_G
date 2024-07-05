@@ -1,9 +1,7 @@
 import pygame
-import os
+from pathlib import Path
 
-image_folder_path = os.path.join(
-    os.path.dirname(os.path.dirname(__file__)), "..", "images"
-)
+image_folder_path = Path.cwd() / "images"
 
 
 class Player:
@@ -19,7 +17,7 @@ class Player:
         self.screen_rect = pg_game.screen.get_rect()
 
         # Load Character sprite
-        self.image = pygame.image.load(image_folder_path + "/turtle.bmp")
+        self.image = pygame.image.load(image_folder_path / "turtle.bmp")
         self.rect = self.image.get_rect()
 
         # Start at the bottom of the screen
