@@ -1,7 +1,11 @@
 import sys
 import pygame
-from settings.settings import Settings
+from settings.game_settings import GameSettings
+from settings.input_box import InputBox
 from characters.player.player import Player
+from characters.npc.npc import Npc
+
+INPUTBOX_DISPLAY = False
 
 
 class projectG:
@@ -15,13 +19,16 @@ class projectG:
         """
         pygame.init()
 
-        self.settings = Settings()
+        self.settings = GameSettings()
+        self.input_box_settings = InputBox()
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height)
         )
         pygame.display.set_caption("ProjectG")
         self.player = Player(self)
+        self.type_box = InputBox(self)
+        self.npc = Npc(self)
 
     def run_game(self):
         """
@@ -32,7 +39,8 @@ class projectG:
             self._check_events()
             # Check Player movements
             self.player.update()
-
+            if self.type_box.active:
+                self._render_typebox()
             # Make screen visible
             self._update_screen()
 
@@ -40,28 +48,22 @@ class projectG:
         """
         Responds to keypresses and mouse events
         """
+        key_map = {
+            pygame.K_RIGHT: "moving_right",
+            pygame.K_LEFT: "moving_left",
+            pygame.K_UP: "moving_up",
+            pygame.K_DOWN: "moving_down",
+        }
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    self.player.moving_right = True
-                elif event.key == pygame.K_LEFT:
-                    self.player.moving_left = True
-                elif event.key == pygame.K_UP:
-                    self.player.moving_up = True
-                elif event.key == pygame.K_DOWN:
-                    self.player.moving_down = True
-            elif event.type == pygame.KEYUP:
-                if event.key == pygame.K_RIGHT:
-                    self.player.moving_right = False
-                elif event.key == pygame.K_LEFT:
-                    self.player.moving_left = False
-                elif event.key == pygame.K_UP:
-                    self.player.moving_up = False
-                elif event.key == pygame.K_DOWN:
-                    self.player.moving_down = False
+            elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
+                movement = event.type == pygame.KEYDOWN
+                if event.key in key_map:
+                    setattr(self.player, key_map[event.key], movement)
+            elif event.type == pygame.K_SPACE:
+                self.type_box.active = True
 
     def _update_screen(self):
         """
@@ -69,6 +71,18 @@ class projectG:
         """
         self.screen.fill(self.settings.bg_color)
         self.player.render()
+        self.npc.render()
+
+        pygame.display.flip()
+
+    def _render_typebox(self):
+        """
+        Create an input box when space bar is clicked
+        """
+
+        self.font = pygame.font.Font(None, 32)
+        self.input_box = pygame.Rect(100, 100, 140, 32)
+        self.text = ""
 
         pygame.display.flip()
 
