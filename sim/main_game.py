@@ -21,7 +21,7 @@ class projectG:
         self.collided = False
         self.font = pygame.font.Font(None, 32)
         self.input_box = pygame.Rect(100, 100, 140, 32)
-        self.text = "need to be able to update"
+        self.text = ""
 
     def run_game(self):
         while True:
@@ -49,16 +49,13 @@ class projectG:
                 movement = event.type == pygame.KEYDOWN
                 if event.key in key_map:
                     setattr(self.player, key_map[event.key], movement)
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and self.collided:
+                if event.type == pygame.KEYDOWN and self.collided:
                     self.type_box.active = True
-                elif event.key == pygame.K_RETURN and self.type_box.active:
-                    self.npc.messages.append(self.text)
-                    print(f"Message sent: {self.text}")
-                    self.text = ""
-                    self.type_box.active = False
-                elif self.type_box.active:
-                    if event.key == pygame.K_BACKSPACE:
+                    if event.key == pygame.K_RETURN:
+                        self.npc.messages.append(self.text)
+                        print(f"Message sent: {self.text}")
+                        self.text = ""
+                    elif event.key == pygame.K_BACKSPACE:
                         self.text = self.text[:-1]
                     else:
                         self.text += event.unicode
