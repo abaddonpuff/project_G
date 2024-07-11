@@ -1,38 +1,47 @@
 import sys
 import pygame
 from settings.game_settings import GameSettings
-from settings.input_box import InputBox
 from characters.player.player import Player
 from characters.npc.npc import Npc
 
 
 class projectG:
-    def __init__(self):
+    def __init__(self, num_characters=2):
         pygame.init()
         self.settings = GameSettings()
-        self.input_box_settings = InputBox()
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height)
         )
         pygame.display.set_caption("ProjectG")
         self.player = Player(self)
-        self.type_box = InputBox()
-        self.npc = Npc(self)
-        self.collided = False
-        self.font = pygame.font.Font(None, 32)
-        self.input_box = pygame.Rect(100, 100, 140, 32)
-        self.text = ""
+        # TODO: get the dimensions from the game, and then use randint in
+        # self.coords to place the npcs in random locations in the grid
+        # self.coords = ...
+        # update npc instance below to get coords
+        self.npcs = [Npc(self) for _ in range(num_characters)]
+        self.npcs_collided = {npc: False for npc in self.npcs}
 
     def run_game(self):
         while True:
             self._check_events()
             self.player.update()
-            self._check_collisions()
-            if self.collided:
-                self.type_box.active = True
-            if self.type_box.active:
-                self._render_typebox()
+
+            for npc in self.npcs:
+                if self.player.rect.colliderect(npc.rect):
+                    self.npcs_collided[npc] = True
+                else:
+                    self.npcs_collided[npc] = False
+
             self._update_screen()
+
+    def _get_collided_characters(self) -> list[Npc]:
+        characters = [
+            npc for npc, collided in self.npcs_collided.items()
+            if collided
+        ]
+        if len(characters) > 1:
+            raise RuntimeError("More than one character collided")
+        return characters
 
     def _check_events(self):
         key_map = {
@@ -49,46 +58,30 @@ class projectG:
                 movement = event.type == pygame.KEYDOWN
                 if event.key in key_map:
                     setattr(self.player, key_map[event.key], movement)
-                if event.type == pygame.KEYDOWN and self.collided:
-                    self.type_box.active = True
-                    if event.key == pygame.K_RETURN:
-                        self.npc.messages.append(self.text)
-                        print(f"Message sent: {self.text}")
-                        self.text = ""
-                    elif event.key == pygame.K_BACKSPACE:
-                        self.text = self.text[:-1]
-                    else:
-                        self.text += event.unicode
-
-    def _check_collisions(self):
-        if self.player.rect.colliderect(self.npc.rect):
-            self.collided = True
-        else:
-            self.collided = False
-            self.type_box.active = False
+                if event.type == pygame.KEYDOWN:
+                    characters = self._get_collided_characters()
+                    if characters:
+                        character = characters[0]
+                        character.text_box.active = True
+                        if event.key == pygame.K_RETURN:
+                            character.messages.append(character.text_box.text)
+                            print(f"Message sent: {character.text_box.text}")
+                            character.text_box.text = ""
+                        elif event.key == pygame.K_BACKSPACE:
+                            character.text_box.text = character.text_box.text[:-1]
+                        else:
+                            character.text_box.text += event.unicode
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
         self.player.render()
-        self.npc.render()
-        if self.type_box.active:
-            pygame.draw.rect(self.screen, (255, 255, 255), self.input_box)
-            txt_surface = self.font.render(self.text, True, (0, 0, 0))
-            self.screen.blit(txt_surface, (self.input_box.x+5, self.input_box.y+5))
-            self.input_box.w = max(200, txt_surface.get_width()+10)
-            self._render_typebox()
-        pygame.display.flip()
 
-    def _render_typebox(self):
-        y_offset = 50
-        for message in self.npc.messages:
-            message_surface = self.font.render(message, True, (0, 0, 0))
-            self.screen.blit(message_surface, (self.input_box.x, self.input_box.y - y_offset))
-            y_offset += 30
-        pygame.draw.rect(self.screen, (255, 255, 255), self.input_box)
-        txt_surface = self.font.render(self.text, True, (0, 0, 0))
-        self.screen.blit(txt_surface, (self.input_box.x + 5, self.input_box.y + 5))
-        self.input_box.w = max(200, txt_surface.get_width() + 10)
+        for npc, collided in self.npcs_collided.items():
+            npc.render()
+            if npc.collided:
+                npc.render_messages()
+
+        pygame.display.flip()
 
 
 if __name__ == "__main__":
