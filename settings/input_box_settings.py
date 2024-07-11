@@ -30,6 +30,7 @@ class InputBoxSettings:
         # self.box_rect = pygame.Rect(100, 100, 140, 32)
         # self.screen_rect.height
 
+        # TODO place text box relative to the character?
         self.y_offset = 50
         self.text = ""
 

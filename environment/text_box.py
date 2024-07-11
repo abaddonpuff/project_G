@@ -15,13 +15,13 @@ class TextBox:
         self.box_settings = InputBoxSettings(pg_game)
         self.screen_rect = pg_game.screen.get_rect()
 
-    def render(self, npc):
+    def render(self, messages):
         """
         Draw the Text in the right place
         """
         text_box_rect = self.box_settings.box_rect
         y_offset = 50
-        for message in npc.messages:
+        for message in messages:
             message_surface = self.box_settings.font.render(message, True, (0, 0, 0))
             self.screen.blit(
                 message_surface, (text_box_rect.x, text_box_rect.y - y_offset)
