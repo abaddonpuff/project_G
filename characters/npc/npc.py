@@ -1,4 +1,3 @@
-from enum import Enum
 from pathlib import Path
 
 import pygame
@@ -6,12 +5,6 @@ import pygame
 from environment.text_box import TextBox
 
 image_folder_path = Path.cwd() / "images"
-
-class Position(Enum):
-    TOP_LEFT = 1
-    TOP_RIGHT = 2
-    BOTTOM_LEFT = 3
-    BOTTOM_RIGHT = 4
 
 class Npc:
     def __init__(self, pg_game, top_offset=0, left_offset=0):
