@@ -1,25 +1,27 @@
-from pathlib import Path
-
+import json
 import pygame
-
+from pathlib import Path
 from environment.text_box import TextBox
 
 image_folder_path = Path.cwd() / "images"
+settings_folder_path = Path.cwd() / "characters" / "npc" / "npc_settings.json"
+
 
 class Npc:
-    def __init__(self, pg_game, top_offset=0, left_offset=0):
+    def __init__(self, pg_game, npc_key=1):
+        settings_path = str(settings_folder_path)
+        settings_file = open(settings_path, "r")
+        npc_dict = json.load(settings_file)
+        keys_list = list(npc_dict.keys())
+        key = keys_list[npc_key]
+        self.image = pygame.image.load(npc_dict[key]["image_path"])
         self.screen = pg_game.screen
         self.settings = pg_game.settings
         self.screen_rect = pg_game.screen.get_rect()
-        self.image = pygame.image.load(image_folder_path / "heart.png")
-        #self.rect = self.image.get_rect()
-        #self.rect.topright = self.screen_rect.topright
-        # render on the bottom left
         self.rect = self.image.get_rect()
-
-        # TODO: set the coords
-        self.rect.bottomleft = self.screen_rect.bottomleft
-        # self.rect = ...
+        coord_x = npc_dict[key]["coordinates"][0]
+        coord_y = npc_dict[key]["coordinates"][1]
+        self.rect.topleft = (coord_x, coord_y)
 
         self.collided = False
         self.text_box = TextBox(pg_game)
