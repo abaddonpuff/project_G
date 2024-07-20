@@ -1,0 +1,36 @@
+{
+    "npc10": {
+        "name": "npc10",
+        "image_path": "/Users/0xabaddon/new_repos/project_G/images/heart.png",
+        "coordinates": [
+            256,
+            256
+        ],
+        "Intelligence": 27,
+        "Honesty": 91,
+        "Patience": 51,
+        "Humor": 11,
+        "Ambition": 53,
+        "Affection": 83,
+        "Confidence": 27,
+        "Adventurousness": 20,
+        "Empathy": 19
+    },
+    "npc8": {
+        "name": "npc8",
+        "image_path": "/Users/0xabaddon/new_repos/project_G/images/heart.png",
+        "coordinates": [
+            0,
+            0
+        ],
+        "Intelligence": 70,
+        "Honesty": 24,
+        "Patience": 87,
+        "Humor": 53,
+        "Ambition": 41,
+        "Affection": 24,
+        "Confidence": 14,
+        "Adventurousness": 50,
+        "Empathy": 22
+    }
+}
