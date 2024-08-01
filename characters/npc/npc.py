@@ -14,6 +14,7 @@ class Npc:
         npc_dict = json.load(settings_file)
         keys_list = list(npc_dict.keys())
         key = keys_list[npc_key]
+        self.personality = npc_dict[key]["attributes"]
         self.image = pygame.image.load(npc_dict[key]["settings"]["image_path"])
         self.screen = pg_game.screen
         self.settings = pg_game.settings

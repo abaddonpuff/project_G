@@ -1,6 +1,7 @@
 import marvin
 import json
 import os
+from enum import Enum
 
 # from pydantic import BaseModel
 # from textblob import TextBlob
@@ -9,6 +10,7 @@ from pathlib import Path
 
 load_dotenv()
 
+# ENVIRONMENT
 OAI_KEY = os.getenv("OPEN_AI_API_KEY")
 npc_settings = Path.cwd() / "characters" / "npc" / "npc_settings.json"
 marvin.settings.openai.api_key = OAI_KEY
@@ -25,12 +27,18 @@ marvin.settings.openai.api_key = OAI_KEY
 #             "Empathy": 25
 
 
+class ResponseValues(Enum):
+    BLUNT = 0
+    NEUTRAL = 1
+    EXCITED = 2
+
+
 def generate_response(npc_personality: dict, user_input: str) -> str:
     message_sentiment = marvin.classify(
         user_input, labels=["friendly", "unfriendly", "neutral"]
     )
     message_type = marvin.classify(
-        user_input, labels=["greeting", "farewell", "request", "question", "other"]
+        user_input, labels=["greeting", "farewell", "request", "question", "statement"]
     )
     top_values = [
         element[0]
@@ -59,10 +67,12 @@ def generate_response(npc_personality: dict, user_input: str) -> str:
 
 def response_semantics(
     npc_values: list, msg_type: str, user_input: str, sentiment: str
-):
+) -> str:
     specifics = ", ".join(npc_values)
-    instructions = f"Respond this {msg_type} with a {sentiment} message highlighting the following values: {specifics} without giving away the value names"
-    # print(instructions)
+    instructions = (
+        f"Respond this {msg_type} with a {sentiment} message that express {specifics}"
+    )
+    print(instructions)
     response = marvin.cast(user_input, target=str, instructions=instructions)
 
     return response
@@ -77,26 +87,30 @@ def evaluate_response(
     user_input: str,
 ) -> str:
     higher_values = 0
-    if sentiment != "neutral" and msg_type == "other":
-        for value in npc_values:
-            if message_values[value] > npc_personality[value]:
-                higher_values += 1
-        if higher_values == 0:
-            sentiment = "boring"
-        if higher_values == 1:
-            sentiment = "neutral"
-        if higher_values == 2:
-            sentiment = "excited"
+    # Check the message to not be neutral so the player tries to win.
+    if msg_type != "greeting" or msg_type != "farewell":
+        if sentiment == "unfriendly":
+            response_sentiment = "angry"
+        else:
+            for value in npc_values:
+                if message_values[value] > npc_personality[value]:
+                    higher_values += 1
+            if higher_values == ResponseValues["BLUNT"].value:
+                response_sentiment = "blunt"
+            elif higher_values == ResponseValues["NEUTRAL"].value:
+                response_sentiment = "neutral"
+            elif higher_values == ResponseValues["EXCITED"].value:
+                response_sentiment = "excited"
+        return response_semantics(npc_values, msg_type, user_input, response_sentiment)
     else:
-        return response_semantics(npc_values, msg_type, user_input, sentiment)
-
-    return response_semantics(npc_values, msg_type, user_input, sentiment)
+        response_sentiment = "neutral"
+        return response_semantics(npc_values, msg_type, user_input, response_sentiment)
 
 
 def main():
     with open(str(npc_settings), "r") as npc:
         npc_personality = json.load(npc)
-    user_input = "Hi"
+    user_input = "Hi! How are you today?"
     print(generate_response(npc_personality["npc9"]["attributes"], user_input))
 
 

@@ -2,6 +2,7 @@ import sys
 import pygame
 import random
 import json
+from mechanics.input_processing import generate_response
 from collections import defaultdict
 from settings.game_settings import GameSettings
 from characters.player.player import Player
@@ -145,6 +146,11 @@ class projectG:
                         if event.key == pygame.K_RETURN:
                             character.messages.append(text_box_event.text)
                             print(f"Message sent: {text_box_event.text}")
+                            char_response = generate_response(
+                                character.personality, text_box_event.text
+                            )
+                            print(f"Response: {char_response}")
+                            character.messages.append(char_response)
                             text_box_event.text = ""
                         elif event.key == pygame.K_BACKSPACE:
                             text_box_event.text = text_box_event.text[:-1]

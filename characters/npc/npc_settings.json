@@ -1,44 +1,44 @@
 {
-    "npc1": {
+    "npc3": {
         "settings": {
-            "name": "npc1",
+            "name": "npc3",
             "image_path": "/Users/0xabaddon/new_repos/project_G/images/heart.png",
             "coordinates": [
-                768,
-                256
-            ]
-        },
-        "attributes": {
-            "Intelligence": 9,
-            "Honesty": 36,
-            "Patience": 46,
-            "Humor": 77,
-            "Ambition": 86,
-            "Affection": 17,
-            "Confidence": 77,
-            "Adventurousness": 48,
-            "Empathy": 17
-        }
-    },
-    "npc9": {
-        "settings": {
-            "name": "npc9",
-            "image_path": "/Users/0xabaddon/new_repos/project_G/images/heart.png",
-            "coordinates": [
-                768,
+                0,
                 512
             ]
         },
         "attributes": {
-            "Intelligence": 17,
-            "Honesty": 97,
-            "Patience": 35,
-            "Humor": 66,
-            "Ambition": 66,
-            "Affection": 0,
-            "Confidence": 23,
-            "Adventurousness": 87,
-            "Empathy": 25
+            "Intelligence": 23,
+            "Honesty": 33,
+            "Patience": 65,
+            "Humor": 83,
+            "Ambition": 49,
+            "Affection": 67,
+            "Confidence": 96,
+            "Adventurousness": 74,
+            "Empathy": 2
+        }
+    },
+    "npc14": {
+        "settings": {
+            "name": "npc14",
+            "image_path": "/Users/0xabaddon/new_repos/project_G/images/heart.png",
+            "coordinates": [
+                256,
+                256
+            ]
+        },
+        "attributes": {
+            "Intelligence": 7,
+            "Honesty": 84,
+            "Patience": 20,
+            "Humor": 64,
+            "Ambition": 79,
+            "Affection": 75,
+            "Confidence": 86,
+            "Adventurousness": 53,
+            "Empathy": 80
         }
     }
 }
