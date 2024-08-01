@@ -74,7 +74,7 @@ def generateNPC():
     for attribute in ATTRIBUTES:
         attribute_dict[attribute] = random.randint(0, 99)
 
-    return {npc_name: {**npc_settings, **attribute_dict}}
+    return {npc_name: {"settings": npc_settings, "attributes": attribute_dict}}
 
 
 def generate_npc_file(num_npc=6):
@@ -158,7 +158,6 @@ class projectG:
         for npc, collided in self.npcs_collided.items():
             npc.render()
             if collided:
-                print("Collided")
                 npc.render_messages()
 
         pygame.display.flip()

@@ -14,13 +14,13 @@ class Npc:
         npc_dict = json.load(settings_file)
         keys_list = list(npc_dict.keys())
         key = keys_list[npc_key]
-        self.image = pygame.image.load(npc_dict[key]["image_path"])
+        self.image = pygame.image.load(npc_dict[key]["settings"]["image_path"])
         self.screen = pg_game.screen
         self.settings = pg_game.settings
         self.screen_rect = pg_game.screen.get_rect()
         self.rect = self.image.get_rect()
-        coord_x = npc_dict[key]["coordinates"][0]
-        coord_y = npc_dict[key]["coordinates"][1]
+        coord_x = npc_dict[key]["settings"]["coordinates"][0]
+        coord_y = npc_dict[key]["settings"]["coordinates"][1]
         self.rect.topleft = (coord_x, coord_y)
 
         self.collided = False
