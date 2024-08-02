@@ -38,7 +38,7 @@ def generate_response(npc_personality: dict, user_input: str) -> str:
         user_input, labels=["friendly", "unfriendly", "neutral"]
     )
     message_type = marvin.classify(
-        user_input, labels=["greeting", "farewell", "request", "question", "statement"]
+        user_input, labels=["greeting", "farewell", "request", "question", "message"]
     )
     top_values = [
         element[0]
@@ -68,7 +68,7 @@ def generate_response(npc_personality: dict, user_input: str) -> str:
 def response_semantics(
     npc_values: list, msg_type: str, user_input: str, sentiment: str
 ) -> str:
-    specifics = ", ".join(npc_values)
+    specifics = " and ".join(npc_values)
     instructions = (
         f"Respond this {msg_type} with a {sentiment} message that express {specifics}"
     )
@@ -88,13 +88,18 @@ def evaluate_response(
 ) -> str:
     higher_values = 0
     # Check the message to not be neutral so the player tries to win.
+    print(f"Values of the message {message_values}")
     if msg_type != "greeting" or msg_type != "farewell":
         if sentiment == "unfriendly":
             response_sentiment = "angry"
         else:
             for value in npc_values:
+                print(
+                    f"Comparing message: {message_values[value]} agains NPC: {npc_personality[value]}"
+                )
                 if message_values[value] > npc_personality[value]:
                     higher_values += 1
+            print(f"Matching values: {higher_values}")
             if higher_values == ResponseValues["BLUNT"].value:
                 response_sentiment = "blunt"
             elif higher_values == ResponseValues["NEUTRAL"].value:

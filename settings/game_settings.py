@@ -7,7 +7,7 @@ class GameSettings:
         """
         Initialize game's settings
         """
-        self.screen_width = 1200
+        self.screen_width = 1400
         self.screen_height = 800
         self.bg_color = (130, 50, 50)
         self.char_speed = 1.5
