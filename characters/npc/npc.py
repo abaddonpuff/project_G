@@ -22,7 +22,7 @@ class Npc:
         self.rect = self.image.get_rect()
         coord_x = npc_dict[key]["settings"]["coordinates"][0]
         coord_y = npc_dict[key]["settings"]["coordinates"][1]
-        self.rect.topleft = (coord_x, coord_y)
+        self.rect.center = (coord_x, coord_y)
 
         self.collided = False
         self.text_box = TextBox(pg_game)

@@ -18,11 +18,13 @@ class Player:
         self.screen_rect = pg_game.screen.get_rect()
 
         # Load Character sprite
-        self.image = pygame.image.load(image_folder_path / "turtle.png")
+        self.image = pygame.image.load(image_folder_path / "boy.png")
         self.rect = self.image.get_rect()
 
-        # Start at the bottom of the screen
-        self.rect.midbottom = self.screen_rect.midbottom
+        # Player starts in the same position everytime
+        coord_x = 350
+        coord_y = 134
+        self.rect.center = (coord_x, coord_y)
 
         # Positional values for the character
         self.x = float(self.rect.x)

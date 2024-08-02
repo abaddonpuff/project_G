@@ -12,6 +12,15 @@ from pathlib import Path
 image_folder_path = Path.cwd() / "images"
 settings_folder_path = Path.cwd() / "characters" / "npc" / "npc_settings.json"
 
+CHARACTER_IMAGES = [
+    "npc1.png",
+    "npc2.png",
+    "npc3.png",
+    "npc4.png",
+    "npc5.png",
+    "npc6.png",
+    "npc7.png",
+]
 
 CHARACTER_NAMES = [
     "npc1",
@@ -21,13 +30,6 @@ CHARACTER_NAMES = [
     "npc5",
     "npc6",
     "npc7",
-    "npc8",
-    "npc9",
-    "npc10",
-    "npc11",
-    "npc12",
-    "npc13",
-    "npc14",
 ]
 ATTRIBUTES = [
     "Intelligence",
@@ -41,41 +43,65 @@ ATTRIBUTES = [
     "Empathy",
 ]
 COORDINATES = [
-    (0, 0),
-    (0, 256),
-    (0, 512),
-    (256, 0),
-    (256, 256),
-    (256, 512),
-    (512, 0),
-    (512, 256),
-    (768, 0),
-    (768, 256),
-    (768, 512),
+    (960, 178),
+    (816, 299),
+    (1066, 300),
+    (995, 723),
+    (805, 564),
+    (471, 370),
+    (102, 511),
+    (251, 590),
+    (504, 723),
 ]
+
 PICKED_COORDINATES = []
+PICKED_NAMES = []
+PICKED_IMAGES = []
 
 
 def generateNPC():
     global PICKED_COORDINATES
+    global PICKED_NAMES
+    global PICKED_IMAGES
 
     attribute_dict = defaultdict(int)
     npc_settings = defaultdict(str)
+    coordinates = _pick_random_unique(COORDINATES, PICKED_COORDINATES)
+    npc_name = _pick_random_unique(CHARACTER_NAMES, PICKED_NAMES)
+    npc_image = _pick_random_unique(CHARACTER_IMAGES, PICKED_IMAGES)
+    # while True:
+    #     coordinates = random.choice(COORDINATES)
+    #     if coordinates not in PICKED_COORDINATES:
+    #         PICKED_COORDINATES.append(coordinates)
+    #         break
+    # while True:
+    #     npc_name = random.choice(CHARACTER_NAMES)
+    #     if npc_name not in PICKED_NAMES:
+    #         PICKED_NAMES.append(npc_name)
+    #         break
+    # while True:
+    #     npc_image = random.choice(CHARACTER_IMAGES)
+    #     if npc_image not in PICKED_IMAGES:
+    #         PICKED_IMAGES.append(npc_image)
+    #         break
 
-    npc_name = random.sample(CHARACTER_NAMES, 1)[0]
     npc_settings["name"] = npc_name
-    npc_settings["image_path"] = str(image_folder_path / "heart.png")
-    while True:
-        coordinates = random.choice(COORDINATES)
-        if coordinates not in PICKED_COORDINATES:
-            PICKED_COORDINATES.append(coordinates)
-            break
+    npc_settings["image_path"] = str(image_folder_path / npc_image)
     npc_settings["coordinates"] = coordinates
 
     for attribute in ATTRIBUTES:
-        attribute_dict[attribute] = random.randint(0, 99)
+        attribute_dict[attribute] = random.randint(0, 70)
 
     return {npc_name: {"settings": npc_settings, "attributes": attribute_dict}}
+
+
+def _pick_random_unique(global_list, global_picked_list):
+    while True:
+        pick = random.choice(global_list)
+        if pick not in global_picked_list:
+            global_picked_list.append(pick)
+            break
+    return pick
 
 
 def generate_npc_file(num_npc=6):
@@ -90,6 +116,8 @@ class projectG:
     def __init__(self, num_characters=2):
         generate_npc_file(num_npc=num_characters)
         pygame.init()
+        # Load the background image
+        self.background_image = pygame.image.load(str(image_folder_path / "town.png"))
         self.settings = GameSettings()
         self.screen = pygame.display.set_mode(
             (self.settings.screen_width, self.settings.screen_height)
@@ -158,7 +186,7 @@ class projectG:
                             text_box_event.text += event.unicode
 
     def _update_screen(self):
-        self.screen.fill(self.settings.bg_color)
+        self.screen.blit(self.background_image, (0, 0))
         self.player.render()
 
         for npc, collided in self.npcs_collided.items():
