@@ -66,21 +66,24 @@ def generateNPC():
 
     attribute_dict = defaultdict(int)
     npc_settings = defaultdict(str)
-    while True:
-        coordinates = random.choice(COORDINATES)
-        if coordinates not in PICKED_COORDINATES:
-            PICKED_COORDINATES.append(coordinates)
-            break
-    while True:
-        npc_name = random.choice(CHARACTER_NAMES)
-        if npc_name not in PICKED_NAMES:
-            PICKED_NAMES.append(npc_name)
-            break
-    while True:
-        npc_image = random.choice(CHARACTER_IMAGES)
-        if npc_image not in PICKED_IMAGES:
-            PICKED_IMAGES.append(npc_image)
-            break
+    coordinates = _pick_random_unique(COORDINATES, PICKED_COORDINATES)
+    npc_name = _pick_random_unique(CHARACTER_NAMES, PICKED_NAMES)
+    npc_image = _pick_random_unique(CHARACTER_IMAGES, PICKED_IMAGES)
+    # while True:
+    #     coordinates = random.choice(COORDINATES)
+    #     if coordinates not in PICKED_COORDINATES:
+    #         PICKED_COORDINATES.append(coordinates)
+    #         break
+    # while True:
+    #     npc_name = random.choice(CHARACTER_NAMES)
+    #     if npc_name not in PICKED_NAMES:
+    #         PICKED_NAMES.append(npc_name)
+    #         break
+    # while True:
+    #     npc_image = random.choice(CHARACTER_IMAGES)
+    #     if npc_image not in PICKED_IMAGES:
+    #         PICKED_IMAGES.append(npc_image)
+    #         break
 
     npc_settings["name"] = npc_name
     npc_settings["image_path"] = str(image_folder_path / npc_image)
@@ -90,6 +93,15 @@ def generateNPC():
         attribute_dict[attribute] = random.randint(0, 70)
 
     return {npc_name: {"settings": npc_settings, "attributes": attribute_dict}}
+
+
+def _pick_random_unique(global_list, global_picked_list):
+    while True:
+        pick = random.choice(global_list)
+        if pick not in global_picked_list:
+            global_picked_list.append(pick)
+            break
+    return pick
 
 
 def generate_npc_file(num_npc=6):

@@ -1,44 +1,44 @@
 {
-    "npc7": {
+    "npc6": {
         "settings": {
-            "name": "npc7",
+            "name": "npc6",
             "image_path": "/Users/0xabaddon/new_repos/project_G/images/npc7.png",
             "coordinates": [
-                1066,
-                300
+                816,
+                299
             ]
         },
         "attributes": {
-            "Intelligence": 67,
-            "Honesty": 30,
-            "Patience": 51,
-            "Humor": 18,
-            "Ambition": 36,
-            "Affection": 33,
-            "Confidence": 69,
-            "Adventurousness": 2,
-            "Empathy": 45
+            "Intelligence": 40,
+            "Honesty": 16,
+            "Patience": 22,
+            "Humor": 11,
+            "Ambition": 46,
+            "Affection": 10,
+            "Confidence": 3,
+            "Adventurousness": 59,
+            "Empathy": 43
         }
     },
-    "npc3": {
+    "npc5": {
         "settings": {
-            "name": "npc3",
-            "image_path": "/Users/0xabaddon/new_repos/project_G/images/npc3.png",
+            "name": "npc5",
+            "image_path": "/Users/0xabaddon/new_repos/project_G/images/npc2.png",
             "coordinates": [
-                995,
-                723
+                251,
+                590
             ]
         },
         "attributes": {
-            "Intelligence": 53,
-            "Honesty": 65,
-            "Patience": 29,
-            "Humor": 31,
-            "Ambition": 34,
-            "Affection": 18,
-            "Confidence": 18,
-            "Adventurousness": 41,
-            "Empathy": 53
+            "Intelligence": 0,
+            "Honesty": 43,
+            "Patience": 18,
+            "Humor": 49,
+            "Ambition": 6,
+            "Affection": 44,
+            "Confidence": 38,
+            "Adventurousness": 27,
+            "Empathy": 28
         }
     }
 }
